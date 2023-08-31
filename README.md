@@ -8,7 +8,7 @@
 
 - `utils` folder
     - no need to use export to to `index.ts` just export that function and use named imports
-    - any api calls should be put into `services` folder
+    - any db calls should be put into `services` folder
     - for string/number/format util functions, first check if `lodash` has it
     - Enums should be Uppercase snake_case eg. `export enum COURSE_TYPE {}`
     - Functions/Variables should be camelCase eg. `formatMoney()` | `const currentMarket`
