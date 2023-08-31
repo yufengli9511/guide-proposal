@@ -12,6 +12,19 @@
     - for string/number/format util functions, first check if `lodash` has it
     - Enums should be Uppercase snake_case eg. `export enum COURSE_TYPE {}`
     - Functions/Variables should be camelCase eg. `formatMoney()` | `const currentMarket`
+
+## Auth 
+- server components/api route get session, session can be null
+`const session = await getServerSession(authOptions)`
+- client component, session can be null
+` const { data: session } = useSession()`
+```typesscript
+useEffect(()=>{
+    if(session){
+        ...
+    }
+},[session])
+```
 ## Prisma Service
 ### Example
 ```typescript
