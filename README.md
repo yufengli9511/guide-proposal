@@ -15,10 +15,13 @@
 
 ## Auth 
 - server components/api route get session, session can be null
-`const session = await getServerSession(authOptions)`
-- client component, session can be null
-` const { data: session } = useSession()`
 ```typesscript
+const session = await getServerSession(authOptions)
+```
+- client component, session can be null
+```typesscript
+const { data: session } = useSession()
+
 useEffect(()=>{
     if(session){
         ...
