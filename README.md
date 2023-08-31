@@ -48,6 +48,34 @@ export type Campaign = Prisma.PromiseReturnType<typeof getCampaign>
 ```
 - The Error will be catched by nearest error.tsx file
 - If you want to only subset of `Campaign`, you can either do `Omit<Campaign,'fieldA'|'fieldB'>` / `Pick<Campaign,'fieldA'|'fieldB'>` / `Partial<Campaign>`
+### Raw Query Example
+```typescript
+import { prisma } from "@/utils/db"
+import { Prisma } from "@prisma/client"
+// all the types of models are generated
+import { email_campaign_senders } from "@prisma/client"
+
+// Pick and add more necessary fields
+export type EmailCampaignSender = Pick<
+  email_campaign_senders,
+  "id" | "from_name" | "from_email" | "company_name" | "address" | "description"
+> & { owner_name: string; total_campaigns: number }
+
+export async function getSenders() {
+  const senders: EmailCampaignSender[] = await prisma.$queryRaw`
+        SELECT ecs.id, ecs.from_name, ecs.from_email, ecs.company_name, ecs.address, ecs.description, CONCAT(u.first_name, ' ', u.last_name) AS owner_name, count(c.id) AS total_campaigns 
+        FROM email_campaign_senders AS ecs
+            LEFT JOIN campaigns AS c ON c.sender_id = ecs.id
+            LEFT JOIN users u ON ecs.owner_user_id = u.id
+        GROUP BY ecs.id`
+
+  if (!senders) throw new Error("No senders found")
+
+  return senders
+}
+
+export type EmailCampaignSenders = Prisma.PromiseReturnType<typeof getSenders>
+```
 
 ### Suggestions
 - Create individual type for every services
@@ -137,3 +165,18 @@ export async function POST(request: NextRequest) {
 - only create client component when it needs to be interactive i.e. needs `onClick` event or it is in `user-layout`, put it in the lowest level of the tree. Nextjs [Moving Client Components Down the Tree](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#moving-client-components-down-the-tree)
 - [Working with updating SearchParam query string](https://nextjs.org/docs/app/api-reference/functions/use-search-params#updating-searchparams)
 I created a function name `updateQueryString` to adopt this idea
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
